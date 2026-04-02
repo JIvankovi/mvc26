@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Metrology Instrumentation Dashboard";
+}
+
+<div class="container">
+    <h1 class="display-4 mb-4 text-center">Metrology Instrumentation Management System</h1>
+    
+    <!-- Laboratory Statistics -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h3><i class="bi bi-building"></i> Laboratory Statistics by Building</h3>
+        </div>
+        <div class="card-body">
+            @foreach (var lab in ViewBag.LaboratoryStats)
+            {
+                <div class="alert alert-info">
+                    <h5>
+                        Building @lab.Building has <strong>1</strong> laboratory 
+                        (<strong>@lab.LaboratoryName</strong>) with a total of <strong>@lab.TotalDevices</strong> devices:
+                    </h5>
+                    <ul class="mb-0">
+                        <li><strong>@lab.Oscilloscopes</strong> Oscilloscope(s)</li>
+                        <li><strong>@lab.Voltmeters</strong> Voltmeter(s)</li>
+                        <li><strong>@lab.Barometers</strong> Barometer(s)</li>
+                        <li><strong>@lab.Thermometers</strong> Thermometer(s)</li>
+                        <li><strong>@lab.Hygrometers</strong> Hygrometer(s)</li>
+                        <li><strong>@lab.Anemometers</strong> Anemometer(s)</li>
+                        <li><strong>@lab.Spectrophotometers</strong> Spectrophotometer(s)</li>
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Technician Performance -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h3><i class="bi bi-person-badge"></i> Technician Performance</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Technician Name</th>
+                        <th>Certification</th>
+                        <th>Experience</th>
+                        <th>Calibrations Performed</th>
+                        <th>Success Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var tech in ViewBag.TechnicianStats)
+                    {
+                        <tr>
+                            <td>@tech.Technician.Name</td>
+                            <td>@tech.Technician.Certification</td>
+                            <td>@tech.Technician.YearsOfExperience years</td>
+                            <td><span class="badge bg-primary">@tech.CalibrationCount</span></td>
+                            <td><span class="badge bg-success">@tech.SuccessRate.ToString("F1")%</span></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Calibrations -->
+    <div class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h3><i class="bi bi-clock-history"></i> Recent Calibration History</h3>
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Technician</th>
+                        <th>Standard</th>
+                        <th>Deviation</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cal in ViewBag.RecentCalibrations)
+                    {
+                        <tr>
+                            <td>@cal.CalibrationDateTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@cal.Technician.Name</td>
+                            <td>@cal.CalibrationStandard</td>
+                            <td>@cal.MeasuredDeviation</td>
+                            <td>
+                                @if (cal.PassedCalibration)
+                                {
+                                    <span class="badge bg-success">Passed</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Failed</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Devices by Measurement Type -->
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white">
+            <h3><i class="bi bi-pie-chart"></i> Devices Grouped by Measurement Type</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                @foreach (var group in ViewBag.DevicesByType)
+                {
+                    <div class="col-md-6 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@group.Type</h5>
+                                <p class="card-text">
+                                    <span class="badge bg-primary fs-5">@group.Count device(s)</span>
+                                </p>
+                                <ul class="list-unstyled">
+                                    @foreach (var device in group.Devices)
+                                    {
+                                        <li><i class="bi bi-check-circle text-success"></i> @device.Name (@device.Manufacturer)</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .card-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+</style>
