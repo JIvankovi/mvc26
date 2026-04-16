@@ -5,7 +5,7 @@ namespace projekt.Models
         public double MinVoltage { get; set; }
         public double MaxVoltage { get; set; }
         public double Impedance { get; set; }
-        public string VoltageType { get; set; }
+        public string VoltageType { get; set; } = string.Empty;
 
         public Voltmeter()
         {

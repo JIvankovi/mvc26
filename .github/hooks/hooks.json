@@ -1,20 +1,21 @@
 {
-  "version": 1,
   "hooks": {
-    "sessionStart": [
+    "UserPromptSubmit": [
       {
         "type": "command",
-        "powershell": "Add-Content -Path logs/session.log -Value \"Session started: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')\" -Encoding UTF8",
-        "cwd": ".",
-        "timeoutSec": 10
+        "command": "powershell.exe -ExecutionPolicy Bypass -File .github/scripts/log-prompt.ps1"
       }
     ],
-    "userPromptSubmitted": [
+    "preToolUse": [
       {
         "type": "command",
-        "powershell": ".github/scripts/log-prompt.ps1",
-        "cwd": ".",
-        "timeoutSec": 10
+        "command": "powershell.exe -ExecutionPolicy Bypass -File .github/scripts/log-prompt.ps1"
+      }
+    ],
+    "AgentResponse": [
+      {
+        "type": "command",
+        "command": "powershell.exe -ExecutionPolicy Bypass -File .github/scripts/log-prompt.ps1"
       }
     ]
   }

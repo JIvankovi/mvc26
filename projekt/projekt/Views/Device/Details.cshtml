@@ -1,0 +1,89 @@
+@model projekt.Models.Device
+
+@{
+    ViewData["Title"] = "Device Details";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header Section -->
+            <div class="d-flex align-items-center mb-4">
+                <h1 class="mb-0">Device Details</h1>
+            </div>
+
+            <!-- Device Card -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-primary text-white py-4">
+                    <h2 class="mb-0">@Model.Name</h2>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Details Grid -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Device ID</h6>
+                            <p class="fs-5">@Model.Id</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Manufacturer</h6>
+                            <p class="fs-5">@Model.Manufacturer</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Serial Number</h6>
+                            <p class="fs-5">
+                                <code>@Model.SerialNumber</code>
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Purchase Date</h6>
+                            <p class="fs-5">@Model.PurchaseDate.ToString("MMMM dd, yyyy")</p>
+                        </div>
+                    </div>
+
+                    <!-- Measurement Type Section -->
+                    
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <h6 class="text-muted text-uppercase fw-bold mb-2">Measurement Type</h6>
+                                <p class="fs-5">@Model.MeasurementType</p>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2 justify-content-center">
+                <a href="/Device/Index" class="btn btn-secondary btn-lg px-4">
+                    <i class="bi bi-arrow-left"></i> Back to Devices
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-header {
+        border-top-left-radius: 0.375rem;
+        border-top-right-radius: 0.375rem;
+    }
+
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2) !important;
+    }
+
+    code {
+        background-color: #f8f9fa;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        color: #d63384;
+    }
+</style>

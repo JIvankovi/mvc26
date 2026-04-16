@@ -6,9 +6,9 @@ namespace projekt.Models
     public class Device
     {
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Manufacturer { get; set; }
-        public string SerialNumber { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Manufacturer { get; set; } = string.Empty;
+        public string SerialNumber { get; set; } = string.Empty;
         public DateTime PurchaseDate { get; set; }
         public MeasurementType MeasurementType { get; set; }
         public List<Calibration> CalibrationHistory { get; set; }

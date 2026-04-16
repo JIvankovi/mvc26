@@ -5,7 +5,7 @@ namespace projekt.Models
         public double MinHumidity { get; set; }
         public double MaxHumidity { get; set; }
         public double Accuracy { get; set; }
-        public string SensorType { get; set; }
+        public string SensorType { get; set; } = string.Empty;
 
         public Hygrometer()
         {

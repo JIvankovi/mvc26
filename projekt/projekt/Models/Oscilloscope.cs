@@ -14,7 +14,7 @@ namespace projekt.Models
         public int NumberOfChannels { get; set; }
         public double Bandwidth { get; set; }
         public double SampleRate { get; set; }
-        public string DisplayType { get; set; }
+        public string DisplayType { get; set; } = string.Empty;
         private Resolution DeviceResolution { get; set; }
 
         public Oscilloscope()

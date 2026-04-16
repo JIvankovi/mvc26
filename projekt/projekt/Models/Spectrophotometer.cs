@@ -5,7 +5,7 @@ namespace projekt.Models
         public double MinWavelength { get; set; }
         public double MaxWavelength { get; set; }
         public double SpectralBandwidth { get; set; }
-        public string DetectorType { get; set; }
+        public string DetectorType { get; set; } = string.Empty;
 
         public Spectrophotometer()
         {

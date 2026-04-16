@@ -5,7 +5,7 @@ namespace projekt.Models
         public double MinPressure { get; set; }
         public double MaxPressure { get; set; }
         public double Resolution { get; set; }
-        public string PressureUnit { get; set; }
+        public string PressureUnit { get; set; } = string.Empty;
 
         public Barometer()
         {

@@ -477,7 +477,10 @@ namespace projekt
             
             foreach (var osc in oscilloscopesInBuildingC)
             {
-                Console.WriteLine($"   - {osc.Name}: {osc.NumberOfChannels} channels, {osc.Bandwidth} MHz bandwidth");
+                if (osc != null)
+                {
+                    Console.WriteLine($"   - {osc.Name}: {osc.NumberOfChannels} channels, {osc.Bandwidth} MHz bandwidth");
+                }
             }
 
             // LINQ Query 3: Group devices by manufacturer and count

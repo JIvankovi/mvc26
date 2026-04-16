@@ -1,0 +1,123 @@
+@model projekt.Models.DeviceLocation
+
+@{
+    ViewData["Title"] = "Device Location Details";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header Section -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h1 class="mb-0">Device Location Details</h1>
+            </div>
+
+            <!-- Device Location Card -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-primary text-white py-4">
+                    <h2 class="mb-0">Location #@Model.Id</h2>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Location Status Alert -->
+                    <div class="mb-4">
+                        @if (Model.IsCurrentLocation)
+                        {
+                            <div class="alert alert-success d-flex align-items-center" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i>
+                                <strong>Active Location</strong>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                                <strong>Inactive Location</strong>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Location Details Grid -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Device ID</h6>
+                            <p class="fs-5">@Model.DeviceId</p>
+                            @if (Model.Device != null)
+                            {
+                                <small class="text-secondary">@Model.Device.Name</small>
+                            }
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Laboratory ID</h6>
+                            <p class="fs-5">@Model.LaboratoryId</p>
+                            @if (Model.Laboratory != null)
+                            {
+                                <small class="text-secondary">@Model.Laboratory.Name</small>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Dates Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Assigned Date</h6>
+                            <p class="fs-5">@Model.Id</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Removed Date</h6>
+                            <p class="fs-5">
+                                @if (Model.Id > 0)
+                                {
+                                    <span>@Model.Id</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">-</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Assignment Reason -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-muted text-uppercase fw-bold mb-2">Assignment Reason</h6>
+                            <p class="fs-5">
+                                @if (!string.IsNullOrEmpty(Model.AssignmentReason))
+                                {
+                                    @Model.AssignmentReason
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No reason specified</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-2">
+                <a href="/DeviceLocation/Index" class="btn btn-secondary px-4">
+                    <i class="bi bi-arrow-left me-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .alert {
+        border-radius: 0.375rem;
+        border: none;
+    }
+    
+    .card {
+        border-radius: 0.5rem;
+    }
+    
+    .btn {
+        border-radius: 0.375rem;
+        font-weight: 500;
+    }
+</style>
