@@ -1,23 +1,45 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using projekt.Data;
 using projekt.Models;
-using projekt.Services;
 
 namespace projekt.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _dbContext;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext dbContext)
         {
             _logger = logger;
+            _dbContext = dbContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var laboratories = await _dbContext.Laboratories
+                .Include(l => l.DeviceLocations)
+                    .ThenInclude(dl => dl.Device)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var technicians = await _dbContext.Technicians
+                .AsNoTracking()
+                .ToListAsync();
+
+            var calibrations = await _dbContext.Calibrations
+                .Include(c => c.Technician)
+                .AsNoTracking()
+                .ToListAsync();
+
+            var devices = await _dbContext.Devices
+                .AsNoTracking()
+                .ToListAsync();
+
             // LINQ Query 1: Get all laboratories with their device counts grouped by building
-            var laboratoryStats = DataService.Laboratories
+            var laboratoryStats = laboratories
                 .Select(lab => new
                 {
                     Building = lab.BuildingCode,
@@ -48,33 +70,33 @@ namespace projekt.Controllers
                 .ToList();
 
             // LINQ Query 2: Get technicians with calibration counts
-            var technicianStats = DataService.Technicians
+            var technicianStats = technicians
                 .Select(tech => new
                 {
                     Technician = tech,
-                    CalibrationCount = DataService.Calibrations
-                        .Count(c => c.Technician.Id == tech.Id),
-                    SuccessRate = DataService.Calibrations
-                        .Where(c => c.Technician.Id == tech.Id)
+                    CalibrationCount = calibrations
+                        .Count(c => c.Technician != null && c.Technician.Id == tech.Id),
+                    SuccessRate = calibrations
+                        .Where(c => c.Technician != null && c.Technician.Id == tech.Id)
                         .Any() 
-                        ? (double)DataService.Calibrations
-                            .Where(c => c.Technician.Id == tech.Id && c.PassedCalibration)
+                        ? (double)calibrations
+                            .Where(c => c.Technician != null && c.Technician.Id == tech.Id && c.PassedCalibration)
                             .Count() / 
-                          DataService.Calibrations
-                            .Count(c => c.Technician.Id == tech.Id) * 100
+                          calibrations
+                            .Count(c => c.Technician != null && c.Technician.Id == tech.Id) * 100
                         : 0
                 })
                 .OrderByDescending(x => x.CalibrationCount)
                 .ToList();
 
             // LINQ Query 3: Get most recent calibrations
-            var recentCalibrations = DataService.Calibrations
+            var recentCalibrations = calibrations
                 .OrderByDescending(c => c.CalibrationDateTime)
                 .Take(5)
                 .ToList();
 
             // LINQ Query 4: Devices grouped by measurement type
-            var devicesByType = DataService.Devices
+            var devicesByType = devices
                 .GroupBy(d => d.MeasurementType)
                 .Select(g => new
                 {

@@ -53,7 +53,7 @@
                                         <code>@device.SerialNumber</code>
                                     </td>
                                     <td>
-                                        @device.PurchaseDate.ToShortDateString()
+                                        @device.PurchaseDate?.ToShortDateString()
                                     </td>
                                     <td class="text-center">
                                         <a href="@Url.Action("Details", "Device", new { id = device.Id })" class="btn btn-sm btn-info">

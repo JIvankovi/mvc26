@@ -74,7 +74,7 @@
                                         }
                                     </td>
                                     <td>
-                                        @calibration.NextCalibrationDue.ToShortDateString()
+                                        @calibration.NextCalibrationDue?.ToShortDateString()
                                     </td>
                                     <td class="text-center">
                                         <a href="@Url.Action("Details", "Calibration", new { id = calibration.Id })" class="btn btn-sm btn-info">

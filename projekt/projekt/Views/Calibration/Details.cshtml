@@ -50,7 +50,7 @@
                             </label>
                         </div>
                         <div class="col-sm-7">
-                            <span>@Model.Technician.Id</span>
+                            <span>@Model.Technician?.Id</span>
                         </div>
                     </div>
                 </div>
@@ -88,14 +88,14 @@
                         </div>
                         <div class="col-sm-7">
                             <span class="fw-semibold">
-                                @Model.NextCalibrationDue.ToShortDateString()
+                                @Model.NextCalibrationDue?.ToShortDateString()
                             </span>
                         </div>
                     </div>
 
                     <!-- Days Until Due -->
                     @{
-                        var daysUntilDue = (Model.NextCalibrationDue - DateTime.Now).Days;
+                        var daysUntilDue = Model.NextCalibrationDue.HasValue ? (Model.NextCalibrationDue.Value - DateTime.Now).Days : 0;
                         var badgeClass = daysUntilDue > 30 ? "bg-success" : daysUntilDue > 7 ? "bg-warning" : "bg-danger";
                     }
                     <div class="alert alert-light border mt-3">

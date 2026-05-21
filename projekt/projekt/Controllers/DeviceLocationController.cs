@@ -1,20 +1,38 @@
 using Microsoft.AspNetCore.Mvc;
-using projekt.Services;
+using Microsoft.EntityFrameworkCore;
+using projekt.Data;
 using projekt.Models;
 
 namespace projekt.Controllers
 {
     public class DeviceLocationController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _dbContext;
+
+        public DeviceLocationController(ApplicationDbContext dbContext)
         {
-            var deviceLocations = DataService.DeviceLocations;
+            _dbContext = dbContext;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var deviceLocations = await _dbContext.DeviceLocations
+                .Include(dl => dl.Device)
+                .Include(dl => dl.Laboratory)
+                .AsNoTracking()
+                .ToListAsync();
+
             return View(deviceLocations);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var deviceLocation = DataService.DeviceLocations.FirstOrDefault(dl => dl.Id == id);
+            var deviceLocation = await _dbContext.DeviceLocations
+                .Include(dl => dl.Device)
+                .Include(dl => dl.Laboratory)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(dl => dl.Id == id);
+
             if (deviceLocation == null)
             {
                 return NotFound();

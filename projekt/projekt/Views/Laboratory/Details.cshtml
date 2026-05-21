@@ -133,8 +133,8 @@
                             @foreach (var deviceLocation in Model.DeviceLocations)
                             {
                                 <div class="list-group-item px-0 py-2 border-0">
-                                    <small class="text-muted">Device @deviceLocation.Device.Id</small>
-                                    <p class="fw-bold mb-0">@deviceLocation.Device.Name</p>
+                                    <small class="text-muted">Device @deviceLocation.Device?.Id</small>
+                                    <p class="fw-bold mb-0">@deviceLocation.Device?.Name</p>
                                 </div>
                             }
                         </div>
