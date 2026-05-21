@@ -1,0 +1,31 @@
+@model projekt.ViewModels.AutocompleteDropdownViewModel
+
+<div class="mb-3 autocomplete-dropdown"
+     data-autocomplete-url="@Model.AutocompleteUrl"
+     data-hidden-name="@Model.FieldName"
+     data-text-name="@Model.TextFieldName"
+     data-required="@Model.Required.ToString().ToLower()">
+    <label class="form-label">@Model.Label</label>
+
+    <input type="hidden"
+           name="@Model.FieldName"
+           class="autocomplete-hidden"
+           value="@Model.Value"
+           @(Model.Required ? "data-val=\"true\" data-val-required=\"Please select a valid item from the list.\"" : "") />
+    <input type="hidden"
+           name="@Model.TextFieldName"
+           class="autocomplete-selected-text"
+           value="@Model.SelectedText" />
+
+    <div class="input-group">
+        <input type="text"
+               class="form-control autocomplete-input"
+               placeholder="@Model.Placeholder"
+               value="@Model.SelectedText"
+               autocomplete="off" />
+        <button type="button" class="btn btn-outline-secondary autocomplete-clear" aria-label="Clear selection">×</button>
+    </div>
+
+    <div class="autocomplete-results shadow-sm"></div>
+    <span class="text-danger field-validation-valid" data-valmsg-for="@Model.FieldName" data-valmsg-replace="true"></span>
+</div>

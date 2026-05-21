@@ -1,0 +1,57 @@
+@model projekt.ViewModels.TechnicianFormViewModel
+
+@{
+    ViewData["Title"] = "Create Technician";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5">Create Technician</h1>
+            <p class="text-muted">Add a new technician who can be assigned to calibrations.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Index" asp-controller="Technician" class="btn btn-outline-secondary">Back to Technicians</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" novalidate>
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Certification" class="form-label"></label>
+                    <input asp-for="Certification" class="form-control" />
+                    <span asp-validation-for="Certification" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="YearsOfExperience" class="form-label"></label>
+                    <input asp-for="YearsOfExperience" class="form-control" />
+                    <span asp-validation-for="YearsOfExperience" class="text-danger"></span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Technician</button>
+                    <a asp-action="Index" asp-controller="Technician" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

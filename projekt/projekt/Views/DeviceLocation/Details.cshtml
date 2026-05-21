@@ -60,18 +60,18 @@
                     <div class="row mb-4">
                         <div class="col-md-6 mb-3">
                             <h6 class="text-muted text-uppercase fw-bold mb-2">Assigned Date</h6>
-                            <p class="fs-5">@Model.Id</p>
+                            <p class="fs-5">@Model.AssignedDate?.ToString("dd.MM.yyyy") ?? "Not set"</p>
                         </div>
                         <div class="col-md-6 mb-3">
                             <h6 class="text-muted text-uppercase fw-bold mb-2">Removed Date</h6>
                             <p class="fs-5">
-                                @if (Model.Id > 0)
+                                @if (Model.RemovedDate.HasValue)
                                 {
-                                    <span>@Model.Id</span>
+                                    <span>@Model.RemovedDate.Value.ToString("dd.MM.yyyy")</span>
                                 }
                                 else
                                 {
-                                    <span class="text-muted">-</span>
+                                    <span class="text-muted">Not removed</span>
                                 }
                             </p>
                         </div>
@@ -98,7 +98,7 @@
 
             <!-- Action Buttons -->
             <div class="d-flex gap-2">
-                <a href="/DeviceLocation/Index" class="btn btn-secondary px-4">
+                 <a asp-action="Index" asp-controller="DeviceLocation" class="btn btn-secondary px-4">
                     <i class="bi bi-arrow-left me-2"></i>Back to List
                 </a>
             </div>

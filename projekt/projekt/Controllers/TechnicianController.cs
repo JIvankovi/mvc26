@@ -6,6 +6,7 @@ using projekt.ViewModels;
 
 namespace projekt.Controllers
 {
+    [Route("technicians")]
     public class TechnicianController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -15,6 +16,7 @@ namespace projekt.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var technicians = await _dbContext.Technicians
@@ -38,6 +40,26 @@ namespace projekt.Controllers
 
             var technicians = await query.OrderBy(t => t.Name).ToListAsync();
             return PartialView("_TechnicianTable", technicians);
+        }
+
+        [HttpGet("autocomplete")]
+        public async Task<IActionResult> Autocomplete(string? term)
+        {
+            var query = _dbContext.Technicians.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                query = query.Where(t => t.Name.Contains(term)
+                    || (t.Email != null && t.Email.Contains(term))
+                    || (t.Certification != null && t.Certification.Contains(term)));
+            }
+
+            var results = await query
+                .OrderBy(t => t.Name)
+                .Select(t => new { t.Id, t.Name, t.Email, t.Certification })
+                .Take(10)
+                .ToListAsync();
+
+            return Json(results);
         }
 
         public async Task<IActionResult> Details(int id)

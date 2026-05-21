@@ -6,7 +6,7 @@ using projekt.ViewModels;
 
 namespace projekt.Controllers
 {
-    [Route("uredaji")]
+    [Route("devices")]
     public class DeviceController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -42,7 +42,27 @@ namespace projekt.Controllers
             return PartialView("_DeviceTable", devices);
         }
 
-        [HttpGet("detalji/{id:int}")]
+        [HttpGet("autocomplete")]
+        public async Task<IActionResult> Autocomplete(string? term)
+        {
+            var query = _dbContext.Devices.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                query = query.Where(d => d.Name.Contains(term)
+                    || (d.Manufacturer != null && d.Manufacturer.Contains(term))
+                    || (d.SerialNumber != null && d.SerialNumber.Contains(term)));
+            }
+
+            var results = await query
+                .OrderBy(d => d.Name)
+                .Select(d => new { d.Id, d.Name, d.Manufacturer, d.SerialNumber })
+                .Take(10)
+                .ToListAsync();
+
+            return Json(results);
+        }
+
+        [HttpGet("details/{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
             var device = await _dbContext.Devices

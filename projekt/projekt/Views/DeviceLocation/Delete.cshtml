@@ -1,0 +1,41 @@
+@model projekt.Models.DeviceLocation
+
+@{
+    ViewData["Title"] = "Delete Device Location";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5">Delete Device Location</h1>
+            <p class="text-muted">Confirm removal of this device location record.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Index" asp-controller="DeviceLocation" class="btn btn-outline-secondary">Back to Locations</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <dl class="row">
+                <dt class="col-sm-4">ID</dt>
+                <dd class="col-sm-8">@Model.Id</dd>
+                <dt class="col-sm-4">Device</dt>
+                <dd class="col-sm-8">@Model.Device?.Name ?? "Unknown"</dd>
+                <dt class="col-sm-4">Laboratory</dt>
+                <dd class="col-sm-8">@Model.Laboratory?.Name ?? "Unassigned"</dd>
+                <dt class="col-sm-4">Assigned Date</dt>
+                <dd class="col-sm-8">@Model.AssignedDate?.ToString("dd.MM.yyyy") ?? "Not set"</dd>
+                <dt class="col-sm-4">Removed Date</dt>
+                <dd class="col-sm-8">@Model.RemovedDate?.ToString("dd.MM.yyyy") ?? "Not set"</dd>
+                <dt class="col-sm-4">Current</dt>
+                <dd class="col-sm-8">@(Model.IsCurrentLocation ? "Yes" : "No")</dd>
+            </dl>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                <button type="submit" class="btn btn-danger">Delete Location</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

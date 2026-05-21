@@ -1,0 +1,55 @@
+@model List<projekt.Models.DeviceLocation>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped mb-0">
+        <thead class="table-light">
+            <tr>
+                <th scope="col" class="text-center" style="width: 60px;">ID</th>
+                <th scope="col">Device</th>
+                <th scope="col">Laboratory</th>
+                <th scope="col">Assigned</th>
+                <th scope="col">Removed</th>
+                <th scope="col" class="text-center">Current</th>
+                <th scope="col">Reason</th>
+                <th scope="col" class="text-center" style="width: 180px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No device locations found. Add a new assignment to get started.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var location in Model)
+                {
+                    <tr>
+                        <td class="text-center align-middle"><span class="badge bg-secondary">@location.Id</span></td>
+                        <td class="align-middle">@location.Device?.Name ?? "Unknown"</td>
+                        <td class="align-middle">@location.Laboratory?.Name ?? "Unassigned"</td>
+                        <td class="align-middle">@location.AssignedDate?.ToString("dd.MM.yyyy")</td>
+                        <td class="align-middle">@location.RemovedDate?.ToString("dd.MM.yyyy")</td>
+                        <td class="align-middle text-center">
+                            @if (location.IsCurrentLocation)
+                            {
+                                <span class="badge bg-success">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">No</span>
+                            }
+                        </td>
+                        <td class="align-middle">@location.AssignmentReason</td>
+                        <td class="text-center align-middle">
+                            <a asp-action="Details" asp-controller="DeviceLocation" asp-route-id="@location.Id" class="btn btn-sm btn-outline-info me-1">Details</a>
+                            <a asp-action="Edit" asp-controller="DeviceLocation" asp-route-id="@location.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                            <a asp-action="Delete" asp-controller="DeviceLocation" asp-route-id="@location.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

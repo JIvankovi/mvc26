@@ -6,7 +6,7 @@ using projekt.ViewModels;
 
 namespace projekt.Controllers
 {
-    [Route("laboratoriji")]
+    [Route("laboratories")]
     public class LaboratoryController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -43,7 +43,27 @@ namespace projekt.Controllers
             return PartialView("_LaboratoryTable", labs);
         }
 
-        [HttpGet("detalji/{id:int}")]
+        [HttpGet("autocomplete")]
+        public async Task<IActionResult> Autocomplete(string? term)
+        {
+            var query = _dbContext.Laboratories.AsNoTracking();
+            if (!string.IsNullOrWhiteSpace(term))
+            {
+                query = query.Where(l => l.Name.Contains(term)
+                    || (l.Location != null && l.Location.Contains(term))
+                    || (l.BuildingCode != null && l.BuildingCode.Contains(term)));
+            }
+
+            var results = await query
+                .OrderBy(l => l.Name)
+                .Select(l => new { l.Id, l.Name, l.Location, l.BuildingCode })
+                .Take(10)
+                .ToListAsync();
+
+            return Json(results);
+        }
+
+        [HttpGet("details/{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
             var laboratory = await _dbContext.Laboratories

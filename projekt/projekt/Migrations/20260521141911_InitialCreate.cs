@@ -21,11 +21,11 @@ namespace projekt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Manufacturer = table.Column<string>(type: "longtext", nullable: true)
+                    Manufacturer = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    SerialNumber = table.Column<string>(type: "longtext", nullable: true)
+                    SerialNumber = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PurchaseDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     MeasurementType = table.Column<int>(type: "int", nullable: false)
@@ -42,14 +42,14 @@ namespace projekt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Location = table.Column<string>(type: "longtext", nullable: true)
+                    Location = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BuildingCode = table.Column<string>(type: "longtext", nullable: true)
+                    BuildingCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     RoomNumber = table.Column<int>(type: "int", nullable: true),
-                    ResponsiblePerson = table.Column<string>(type: "longtext", nullable: true)
+                    ResponsiblePerson = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -64,13 +64,13 @@ namespace projekt.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: true)
+                    Email = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PhoneNumber = table.Column<string>(type: "longtext", nullable: true)
+                    PhoneNumber = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Certification = table.Column<string>(type: "longtext", nullable: true)
+                    Certification = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     YearsOfExperience = table.Column<int>(type: "int", nullable: false)
                 },
@@ -91,7 +91,7 @@ namespace projekt.Migrations
                     AssignedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     RemovedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
                     IsCurrentLocation = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    AssignmentReason = table.Column<string>(type: "longtext", nullable: true)
+                    AssignmentReason = table.Column<string>(type: "varchar(300)", maxLength: 300, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -119,15 +119,15 @@ namespace projekt.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     CalibrationDateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    DeviceId = table.Column<int>(type: "int", nullable: true),
                     TechnicianId = table.Column<int>(type: "int", nullable: true),
-                    CalibrationStandard = table.Column<string>(type: "longtext", nullable: true)
+                    CalibrationStandard = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MeasuredDeviation = table.Column<double>(type: "double", nullable: false),
                     PassedCalibration = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     NextCalibrationDue = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Notes = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DeviceId = table.Column<int>(type: "int", nullable: true)
+                    Notes = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {

@@ -105,9 +105,7 @@ C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\De
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\scopedcss\bundle\projekt.styles.css
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\scopedcss\projectbundle\projekt.bundle.scp.css
-C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\6zf77uxqkn-bxb9phizzr.gz
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\399o3vt7n8-61n19gt1b8.gz
-C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\9iy6wgpj8h-xtxxf3hu2r.gz
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\mewpniqhy4-bqjiyaj88i.gz
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\opofkjtdsh-c2jlpeoesf.gz
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\3b6rsrr32g-erw9l3u2r3.gz
@@ -186,3 +184,15 @@ C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\De
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\ref\projekt.dll
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\Debug\net9.0\MySqlConnector.dll
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\Debug\net9.0\Pomelo.EntityFrameworkCore.MySql.dll
+C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\6zf77uxqkn-3cxk1yz8yf.gz
+C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\9iy6wgpj8h-dqdpo32ghe.gz
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\appsettings.Development.json
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\appsettings.json
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.staticwebassets.runtime.json
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.staticwebassets.endpoints.json
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.exe
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.deps.json
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.runtimeconfig.json
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.dll
+c:\Users\CinoP\AppData\Local\Temp\mvc26_build_test\projekt.pdb
+C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

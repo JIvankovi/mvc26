@@ -214,3 +214,58 @@ footer.footer {
     border-top: 2px solid #999;
     color: #000;
 }
+
+.autocomplete-dropdown {
+    position: relative;
+}
+
+.autocomplete-results {
+    display: none;
+    position: absolute;
+    z-index: 1050;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    right: 0;
+    max-height: 240px;
+    overflow-y: auto;
+    background-color: #fff;
+    border: 1px solid #999;
+    border-radius: 0.25rem;
+}
+
+.autocomplete-item {
+    text-align: left;
+}
+
+.autocomplete-item:hover {
+    background-color: #f4f4f4;
+}
+
+.autocomplete-empty {
+    padding: 0.75rem 1rem;
+}
+
+.datetime-control .datetime-date,
+.datetime-control .datetime-time {
+    border: 1px solid #999;
+}
+
+.datetime-validation {
+    display: block;
+    margin-top: 0.35rem;
+    min-height: 1.2rem;
+}
+
+.lab4-loading {
+    opacity: 0.65;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.lab4-updated {
+    animation: lab4-fade 0.6s ease-in-out;
+}
+
+@keyframes lab4-fade {
+    0% { transform: translateY(8px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}

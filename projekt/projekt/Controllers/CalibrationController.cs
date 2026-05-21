@@ -6,6 +6,7 @@ using projekt.ViewModels;
 
 namespace projekt.Controllers
 {
+    [Route("calibrations")]
     public class CalibrationController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
@@ -15,6 +16,7 @@ namespace projekt.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet("")]
         public async Task<IActionResult> Index()
         {
             var calibrations = await _dbContext.Calibrations
@@ -47,6 +49,7 @@ namespace projekt.Controllers
             return PartialView("_CalibrationTable", list);
         }
 
+        [HttpGet("details/{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
             var calibration = await _dbContext.Calibrations

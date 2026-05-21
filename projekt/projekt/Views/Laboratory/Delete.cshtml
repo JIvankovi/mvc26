@@ -1,0 +1,41 @@
+@model projekt.Models.Laboratory
+
+@{
+    ViewData["Title"] = "Delete Laboratory";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5">Delete Laboratory</h1>
+            <p class="text-muted">Confirm deletion of the laboratory record before continuing.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Index" asp-controller="Laboratory" class="btn btn-outline-secondary">Back to Laboratories</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <dl class="row">
+                <dt class="col-sm-4">ID</dt>
+                <dd class="col-sm-8">@Model.Id</dd>
+                <dt class="col-sm-4">Name</dt>
+                <dd class="col-sm-8">@Model.Name</dd>
+                <dt class="col-sm-4">Location</dt>
+                <dd class="col-sm-8">@Model.Location</dd>
+                <dt class="col-sm-4">Building Code</dt>
+                <dd class="col-sm-8">@Model.BuildingCode</dd>
+                <dt class="col-sm-4">Room Number</dt>
+                <dd class="col-sm-8">@Model.RoomNumber</dd>
+                <dt class="col-sm-4">Responsible Person</dt>
+                <dd class="col-sm-8">@Model.ResponsiblePerson</dd>
+            </dl>
+
+            <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                <button type="submit" class="btn btn-danger">Delete Laboratory</button>
+                 <a asp-action="Index" asp-controller="Laboratory" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

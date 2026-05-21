@@ -1,0 +1,90 @@
+@model projekt.ViewModels.CalibrationFormViewModel
+
+@{
+    ViewData["Title"] = "Create Calibration";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4 align-items-end">
+        <div class="col-md-8">
+            <h1 class="display-5">Create Calibration</h1>
+            <p class="text-muted">Record a new device calibration using the autocomplete selectors and date/time picker.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Index" asp-controller="Calibration" class="btn btn-outline-secondary">Back to Calibrations</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Create" method="post" novalidate>
+                @await Html.PartialAsync("_AutocompleteDropdown", new projekt.ViewModels.AutocompleteDropdownViewModel
+                {
+                    FieldName = "DeviceId",
+                    TextFieldName = "DeviceName",
+                    Label = "Device",
+                    Value = Model.DeviceId,
+                    SelectedText = Model.DeviceName,
+                    Placeholder = "Search for a device...",
+                    AutocompleteUrl = Url.Action("Autocomplete", "Device") ?? string.Empty,
+                    Required = true
+                })
+
+                @await Html.PartialAsync("_AutocompleteDropdown", new projekt.ViewModels.AutocompleteDropdownViewModel
+                {
+                    FieldName = "TechnicianId",
+                    TextFieldName = "TechnicianName",
+                    Label = "Technician",
+                    Value = Model.TechnicianId,
+                    SelectedText = Model.TechnicianName,
+                    Placeholder = "Search for a technician...",
+                    AutocompleteUrl = Url.Action("Autocomplete", "Technician") ?? string.Empty,
+                    Required = false
+                })
+
+                @await Html.PartialAsync("_DateTimeControl", new projekt.ViewModels.DateTimeControlViewModel
+                {
+                    FieldName = "CalibrationDateTime",
+                    Label = "Calibration Date and Time",
+                    Value = Model.CalibrationDateTime,
+                    Required = true
+                })
+
+                <div class="mb-3">
+                    <label asp-for="CalibrationStandard" class="form-label"></label>
+                    <input asp-for="CalibrationStandard" class="form-control" />
+                    <span asp-validation-for="CalibrationStandard" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="MeasuredDeviation" class="form-label"></label>
+                    <input asp-for="MeasuredDeviation" class="form-control" step="0.01" type="number" />
+                    <span asp-validation-for="MeasuredDeviation" class="text-danger"></span>
+                </div>
+                <div class="form-check form-switch mb-3">
+                    <input asp-for="PassedCalibration" class="form-check-input" />
+                    <label asp-for="PassedCalibration" class="form-check-label"></label>
+                </div>
+                @await Html.PartialAsync("_DateTimeControl", new projekt.ViewModels.DateTimeControlViewModel
+                {
+                    FieldName = "NextCalibrationDue",
+                    Label = "Next Calibration Due",
+                    Value = Model.NextCalibrationDue,
+                    Required = false
+                })
+                <div class="mb-3">
+                    <label asp-for="Notes" class="form-label"></label>
+                    <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Notes" class="text-danger"></span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Calibration</button>
+                    <a asp-action="Index" asp-controller="Calibration" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

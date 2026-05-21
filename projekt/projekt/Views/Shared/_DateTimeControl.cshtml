@@ -1,0 +1,26 @@
+@model projekt.ViewModels.DateTimeControlViewModel
+
+<div class="mb-3 datetime-control" data-field-name="@Model.FieldName" data-required="@Model.Required.ToString().ToLower()">
+    <label class="form-label">@Model.Label</label>
+    <div class="row g-2">
+        <div class="col-sm-6">
+            <input type="text"
+                   class="form-control datetime-date"
+                   placeholder="dd.mm.yyyy"
+                   value="" />
+        </div>
+        <div class="col-sm-6">
+            <input type="text"
+                   class="form-control datetime-time"
+                   placeholder="HH:mm"
+                   value="" />
+        </div>
+    </div>
+
+    <input type="hidden"
+           name="@Model.FieldName"
+           class="datetime-hidden"
+           value="@(Model.Value.HasValue ? Model.Value.Value.ToString("o") : string.Empty)"
+           @(Model.Required ? "data-val=\"true\" data-val-required=\"Please enter a valid date and time.\"" : "") />
+    <span class="text-danger field-validation-valid datetime-validation" data-valmsg-for="@Model.FieldName" data-valmsg-replace="true"></span>
+</div>

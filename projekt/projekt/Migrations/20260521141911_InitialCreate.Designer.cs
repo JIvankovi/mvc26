@@ -12,7 +12,7 @@ using projekt.Data;
 namespace projekt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260521130229_InitialCreate")]
+    [Migration("20260521141911_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -37,7 +37,8 @@ namespace projekt.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("CalibrationStandard")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<int?>("DeviceId")
                         .HasColumnType("int");
@@ -49,7 +50,8 @@ namespace projekt.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
 
                     b.Property<bool>("PassedCalibration")
                         .HasColumnType("tinyint(1)");
@@ -75,20 +77,23 @@ namespace projekt.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Manufacturer")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.Property<int>("MeasurementType")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.Property<DateTime?>("PurchaseDate")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("SerialNumber")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.HasKey("Id");
 
@@ -107,7 +112,8 @@ namespace projekt.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("AssignmentReason")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(300)
+                        .HasColumnType("varchar(300)");
 
                     b.Property<int>("DeviceId")
                         .HasColumnType("int");
@@ -139,17 +145,21 @@ namespace projekt.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BuildingCode")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
 
                     b.Property<string>("Location")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("ResponsiblePerson")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
 
                     b.Property<int?>("RoomNumber")
                         .HasColumnType("int");
@@ -168,17 +178,21 @@ namespace projekt.Migrations
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Certification")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasMaxLength(150)
+                        .HasColumnType("varchar(150)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<int>("YearsOfExperience")
                         .HasColumnType("int");
@@ -190,15 +204,17 @@ namespace projekt.Migrations
 
             modelBuilder.Entity("projekt.Models.Calibration", b =>
                 {
-                    b.HasOne("projekt.Models.Device", null)
+                    b.HasOne("projekt.Models.Device", "Device")
                         .WithMany("CalibrationHistory")
                         .HasForeignKey("DeviceId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("projekt.Models.Technician", "Technician")
-                        .WithMany()
+                        .WithMany("Calibrations")
                         .HasForeignKey("TechnicianId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Device");
 
                     b.Navigation("Technician");
                 });
@@ -231,6 +247,11 @@ namespace projekt.Migrations
             modelBuilder.Entity("projekt.Models.Laboratory", b =>
                 {
                     b.Navigation("DeviceLocations");
+                });
+
+            modelBuilder.Entity("projekt.Models.Technician", b =>
+                {
+                    b.Navigation("Calibrations");
                 });
 #pragma warning restore 612, 618
         }

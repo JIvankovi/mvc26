@@ -1,0 +1,58 @@
+@model projekt.ViewModels.LaboratoryFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Laboratory";
+}
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1 class="display-5">Edit Laboratory</h1>
+            <p class="text-muted">Modify laboratory metadata and save the form.</p>
+        </div>
+        <div class="col-md-4 text-end">
+            <a asp-action="Index" asp-controller="Laboratory" class="btn btn-outline-secondary">Back to Laboratories</a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+                <input asp-for="Id" type="hidden" />
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Location" class="form-label"></label>
+                    <input asp-for="Location" class="form-control" />
+                    <span asp-validation-for="Location" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="BuildingCode" class="form-label"></label>
+                    <input asp-for="BuildingCode" class="form-control" />
+                    <span asp-validation-for="BuildingCode" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="RoomNumber" class="form-label"></label>
+                    <input asp-for="RoomNumber" class="form-control" />
+                    <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ResponsiblePerson" class="form-label"></label>
+                    <input asp-for="ResponsiblePerson" class="form-control" />
+                    <span asp-validation-for="ResponsiblePerson" class="text-danger"></span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

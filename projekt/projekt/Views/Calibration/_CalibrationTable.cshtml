@@ -1,0 +1,55 @@
+@model List<projekt.Models.Calibration>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped mb-0">
+        <thead class="table-light">
+            <tr>
+                <th scope="col" class="text-center" style="width: 60px;">ID</th>
+                <th scope="col">Device</th>
+                <th scope="col">Technician</th>
+                <th scope="col">Calibration Date</th>
+                <th scope="col">Deviation</th>
+                <th scope="col">Status</th>
+                <th scope="col">Next Due</th>
+                <th scope="col" class="text-center" style="width: 180px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || !Model.Any())
+            {
+                <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No calibration records found. Add a new calibration to begin.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var calibration in Model)
+                {
+                    <tr>
+                        <td class="text-center align-middle"><span class="badge bg-secondary">@calibration.Id</span></td>
+                        <td class="align-middle">@calibration.Device?.Name ?? "Unknown"</td>
+                        <td class="align-middle">@calibration.Technician?.Name ?? "N/A"</td>
+                        <td class="align-middle">@calibration.CalibrationDateTime.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td class="align-middle text-center">@calibration.MeasuredDeviation</td>
+                        <td class="align-middle text-center">
+                            @if (calibration.PassedCalibration)
+                            {
+                                <span class="badge bg-success">Passed</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Failed</span>
+                            }
+                        </td>
+                        <td class="align-middle">@calibration.NextCalibrationDue?.ToString("dd.MM.yyyy")</td>
+                        <td class="text-center align-middle">
+                            <a asp-action="Details" asp-controller="Calibration" asp-route-id="@calibration.Id" class="btn btn-sm btn-outline-info me-1">Details</a>
+                            <a asp-action="Edit" asp-controller="Calibration" asp-route-id="@calibration.Id" class="btn btn-sm btn-outline-primary me-1">Edit</a>
+                            <a asp-action="Delete" asp-controller="Calibration" asp-route-id="@calibration.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
