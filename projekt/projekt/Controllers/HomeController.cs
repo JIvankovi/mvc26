@@ -46,25 +46,25 @@ namespace projekt.Controllers
                     LaboratoryName = lab.Name,
                     TotalDevices = lab.DeviceLocations.Count(dl => dl.IsCurrentLocation),
                     Oscilloscopes = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Oscilloscope)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.ElectricalSignal)
                         .Count(),
                     Voltmeters = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Voltmeter)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.Voltage)
                         .Count(),
                     Barometers = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Barometer)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.Pressure)
                         .Count(),
                     Thermometers = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Thermometer)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.Temperature)
                         .Count(),
                     Hygrometers = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Hygrometer)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.Humidity)
                         .Count(),
                     Anemometers = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Anemometer)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.WindSpeed)
                         .Count(),
                     Spectrophotometers = lab.DeviceLocations
-                        .Where(dl => dl.IsCurrentLocation && dl.Device is Spectrophotometer)
+                        .Where(dl => dl.IsCurrentLocation && dl.Device != null && dl.Device.MeasurementType == MeasurementType.LightSpectrum)
                         .Count()
                 })
                 .ToList();
