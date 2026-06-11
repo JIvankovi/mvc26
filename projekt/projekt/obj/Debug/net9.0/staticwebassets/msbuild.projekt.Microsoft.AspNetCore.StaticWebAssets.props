@@ -1170,23 +1170,23 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\.gitkeep'))</OriginalItemSpec>
     </StaticWebAsset>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\09ad39eed14049ef941eda92786c4bac.url'))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\df982c08aaf14f1bb4d160a77af6a095.md'))">
       <SourceType>Package</SourceType>
       <SourceId>projekt</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/projekt</BasePath>
-      <RelativePath>uploads/09ad39eed14049ef941eda92786c4bac.url</RelativePath>
+      <RelativePath>uploads/df982c08aaf14f1bb4d160a77af6a095.md</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>gmpmeteyu2</Fingerprint>
-      <Integrity>yBJXIuEKeLa6M6DxAr9QI6TPViWTcfyh8p7JE5K+3jE=</Integrity>
+      <Fingerprint>bbis3evy0n</Fingerprint>
+      <Integrity>SWmWcjtVJ5qxmiB8+jOYL/t5YKcCV9SFJQ2y8nak224=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\09ad39eed14049ef941eda92786c4bac.url'))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\df982c08aaf14f1bb4d160a77af6a095.md'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>
