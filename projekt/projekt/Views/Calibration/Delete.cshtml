@@ -31,7 +31,10 @@
             </dl>
 
             <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-                <button type="submit" class="btn btn-danger">Delete Calibration</button>
+                @if (User.IsInRole("Admin"))
+                {
+                    <button type="submit" class="btn btn-danger">Delete Calibration</button>
+                }
                 <a asp-action="Index" asp-controller="Calibration" class="btn btn-secondary ms-2">Cancel</a>
             </form>
         </div>

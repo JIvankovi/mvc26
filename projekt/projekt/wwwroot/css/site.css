@@ -14,7 +14,7 @@ html {
 body {
     background-color: #E8E8E8; /* Light beige background */
     color: #333;
-    margin-bottom: 60px;
+    min-height: 100vh;
 }
 
 .btn, .form-control, .card {
@@ -213,6 +213,7 @@ footer.footer {
     background-color: #C0C0C0;
     border-top: 2px solid #999;
     color: #000;
+    flex-shrink: 0;
 }
 
 .autocomplete-dropdown {

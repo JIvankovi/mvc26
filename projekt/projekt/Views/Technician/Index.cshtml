@@ -11,7 +11,10 @@
             <p class="text-muted">Search, review and manage technicians using an AJAX-enabled list view.</p>
         </div>
         <div class="col-md-6 text-end">
-            <a asp-action="Create" asp-controller="Technician" class="btn btn-primary">Add Technician</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" asp-controller="Technician" class="btn btn-primary">Add Technician</a>
+            }
         </div>
     </div>
 

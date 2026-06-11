@@ -33,7 +33,10 @@
             </dl>
 
             <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
-                <button type="submit" class="btn btn-danger">Delete Laboratory</button>
+                @if (User.IsInRole("Admin"))
+                {
+                    <button type="submit" class="btn btn-danger">Delete Laboratory</button>
+                }
                  <a asp-action="Index" asp-controller="Laboratory" class="btn btn-secondary ms-2">Cancel</a>
             </form>
         </div>

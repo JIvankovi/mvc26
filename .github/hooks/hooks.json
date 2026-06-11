@@ -3,19 +3,13 @@
     "UserPromptSubmit": [
       {
         "type": "command",
-        "command": "powershell.exe -ExecutionPolicy Bypass -File .github/scripts/log-prompt.ps1"
+        "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\.github\\hooks\\hoog-log.ps1'"
       }
     ],
     "preToolUse": [
       {
         "type": "command",
-        "command": "powershell.exe -ExecutionPolicy Bypass -File .github/scripts/log-prompt.ps1"
-      }
-    ],
-    "AgentResponse": [
-      {
-        "type": "command",
-        "command": "powershell.exe -ExecutionPolicy Bypass -File .github/scripts/log-prompt.ps1"
+        "command": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\.github\\hooks\\hoog-log.ps1'"
       }
     ]
   }

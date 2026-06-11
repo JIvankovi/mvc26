@@ -1,19 +1,78 @@
 using projekt.Models;
 using projekt.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Data.Common;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 
 namespace projekt
 {
-    public class Program
+    public partial class Program
     {
-        public static void Main(string[] args)
+        private const string InitialMigrationId = "20260521141911_InitialCreate";
+        private const string IdentityMigrationId = "20260611144014_AddIdentityAuth";
+        private const string EfProductVersion = "9.0.0";
+        private const string AdminEmail = "admin@admin.com";
+
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add Entity Framework Core with MySQL
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            // Add Entity Framework Core with the active provider.
+            if (builder.Environment.IsEnvironment("Testing"))
+            {
+                var testingConnectionString = builder.Configuration.GetConnectionString("TestingConnection")
+                    ?? builder.Configuration.GetConnectionString("DefaultConnection");
+
+                builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseMySql(testingConnectionString, new MySqlServerVersion(new Version(8, 0, 36))));
+            }
+            else
+            {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+                builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 36))));
+            }
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = true;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = true;
+                    options.User.RequireUniqueEmail = true;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            var authBuilder = builder.Services.AddAuthentication();
+
+            var googleClientId = builder.Configuration["Authentication:Google:ClientId"];
+            var googleClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            if (!string.IsNullOrWhiteSpace(googleClientId) && !string.IsNullOrWhiteSpace(googleClientSecret))
+            {
+                authBuilder.AddGoogle(options =>
+                {
+                    options.ClientId = googleClientId;
+                    options.ClientSecret = googleClientSecret;
+                    options.SignInScheme = IdentityConstants.ExternalScheme;
+                });
+            }
+
+            var microsoftClientId = builder.Configuration["Authentication:Microsoft:ClientId"];
+            var microsoftClientSecret = builder.Configuration["Authentication:Microsoft:ClientSecret"];
+            if (!string.IsNullOrWhiteSpace(microsoftClientId) && !string.IsNullOrWhiteSpace(microsoftClientSecret))
+            {
+                authBuilder.AddMicrosoftAccount(options =>
+                {
+                    options.ClientId = microsoftClientId;
+                    options.ClientSecret = microsoftClientSecret;
+                    options.SignInScheme = IdentityConstants.ExternalScheme;
+                });
+            }
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -29,7 +88,10 @@ namespace projekt
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -40,17 +102,156 @@ namespace projekt
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
-            // Seed the database with sample data
-            using (var scope = app.Services.CreateScope())
+            if (!app.Environment.IsEnvironment("Testing"))
             {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                SeedDatabase(dbContext);
+                await SeedDatabaseAsync(app.Services);
             }
 
-            app.Run();
+            await app.RunAsync();
         }
 
-        private static void SeedDatabase(ApplicationDbContext dbContext)
+        private static async Task SeedDatabaseAsync(IServiceProvider services)
+        {
+            using var scope = services.CreateScope();
+
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            await EnsureMigrationBaselineAsync(dbContext);
+            await dbContext.Database.MigrateAsync();
+
+            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            await EnsureRolesAsync(roleManager);
+            await EnsureAdminAccountAsync(userManager);
+
+            SeedApplicationData(dbContext);
+        }
+
+        private static async Task EnsureRolesAsync(RoleManager<IdentityRole> roleManager)
+        {
+            var roles = new[] { "Admin", "User" };
+
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(role));
+                }
+            }
+        }
+
+        private static async Task EnsureAdminAccountAsync(UserManager<ApplicationUser> userManager)
+        {
+            var adminUser = await userManager.FindByEmailAsync(AdminEmail);
+            if (adminUser == null)
+            {
+                return;
+            }
+
+            if (!string.Equals(adminUser.Category, "Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                adminUser.Category = "Admin";
+                await userManager.UpdateAsync(adminUser);
+            }
+
+            if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            {
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+            }
+
+            if (await userManager.IsInRoleAsync(adminUser, "User"))
+            {
+                await userManager.RemoveFromRoleAsync(adminUser, "User");
+            }
+        }
+
+        private static async Task EnsureMigrationBaselineAsync(ApplicationDbContext dbContext)
+        {
+            await dbContext.Database.OpenConnectionAsync();
+
+            var applicationTablesExist =
+                await TableExistsAsync(dbContext, "Devices") &&
+                await TableExistsAsync(dbContext, "Laboratories") &&
+                await TableExistsAsync(dbContext, "Technicians") &&
+                await TableExistsAsync(dbContext, "Calibrations") &&
+                await TableExistsAsync(dbContext, "DeviceLocations");
+
+            if (!applicationTablesExist)
+            {
+                await dbContext.Database.CloseConnectionAsync();
+                return;
+            }
+
+            try
+            {
+                await EnsureMigrationsHistoryTableAsync(dbContext);
+                await InsertMigrationHistoryRowAsync(dbContext, InitialMigrationId);
+
+                if (await TableExistsAsync(dbContext, "AspNetUsers"))
+                {
+                    await InsertMigrationHistoryRowAsync(dbContext, IdentityMigrationId);
+                }
+            }
+            finally
+            {
+                await dbContext.Database.CloseConnectionAsync();
+            }
+        }
+
+        private static async Task EnsureMigrationsHistoryTableAsync(ApplicationDbContext dbContext)
+        {
+            if (await TableExistsAsync(dbContext, "__EFMigrationsHistory"))
+            {
+                return;
+            }
+
+            await using var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = """
+                CREATE TABLE __EFMigrationsHistory (
+                    MigrationId varchar(150) NOT NULL,
+                    ProductVersion varchar(32) NOT NULL,
+                    PRIMARY KEY (MigrationId)
+                )
+                """;
+
+            await command.ExecuteNonQueryAsync();
+        }
+
+        private static async Task InsertMigrationHistoryRowAsync(ApplicationDbContext dbContext, string migrationId)
+        {
+            await using var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = "INSERT IGNORE INTO __EFMigrationsHistory (MigrationId, ProductVersion) VALUES (@migrationId, @productVersion);";
+
+            AddParameter(command, "@migrationId", migrationId);
+            AddParameter(command, "@productVersion", EfProductVersion);
+
+            await command.ExecuteNonQueryAsync();
+        }
+
+        private static async Task<bool> TableExistsAsync(ApplicationDbContext dbContext, string tableName)
+        {
+            await using var command = dbContext.Database.GetDbConnection().CreateCommand();
+            command.CommandText = """
+                SELECT COUNT(*)
+                FROM information_schema.tables
+                WHERE table_schema = DATABASE()
+                  AND table_name = @tableName;
+                """;
+
+            AddParameter(command, "@tableName", tableName);
+
+            var result = await command.ExecuteScalarAsync();
+            return Convert.ToInt32(result) > 0;
+        }
+
+        private static void AddParameter(DbCommand command, string name, string value)
+        {
+            var parameter = command.CreateParameter();
+            parameter.ParameterName = name;
+            parameter.Value = value;
+            command.Parameters.Add(parameter);
+        }
+
+        private static void SeedApplicationData(ApplicationDbContext dbContext)
         {
             // Check if data already exists
             if (dbContext.Technicians.Any())

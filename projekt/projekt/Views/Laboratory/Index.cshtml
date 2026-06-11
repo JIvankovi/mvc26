@@ -11,7 +11,10 @@
             <p class="text-muted">Search, review and manage laboratory records using AJAX.</p>
         </div>
         <div class="col-md-6 text-end">
-            <a asp-action="Create" asp-controller="Laboratory" class="btn btn-primary">Add Laboratory</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" asp-controller="Laboratory" class="btn btn-primary">Add Laboratory</a>
+            }
         </div>
     </div>
 

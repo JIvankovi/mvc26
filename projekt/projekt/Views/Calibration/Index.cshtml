@@ -11,7 +11,10 @@
             <p class="text-muted">Review calibration history and search across related devices and technicians.</p>
         </div>
         <div class="col-md-6 text-end">
-            <a asp-action="Create" asp-controller="Calibration" class="btn btn-primary">Add Calibration</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" asp-controller="Calibration" class="btn btn-primary">Add Calibration</a>
+            }
         </div>
     </div>
 

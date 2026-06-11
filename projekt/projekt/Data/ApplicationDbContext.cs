@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using projekt.Models;
 
@@ -7,7 +8,7 @@ namespace projekt.Data
     /// Entity Framework Core DbContext for the projekt application.
     /// This class manages all database operations and entity mappings.
     /// </summary>
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -20,6 +21,7 @@ namespace projekt.Data
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Laboratory> Laboratories { get; set; }
         public DbSet<DeviceLocation> DeviceLocations { get; set; }
+        public DbSet<UploadedFile> UploadedFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
