@@ -104,16 +104,17 @@ namespace projekt.Controllers
 
             if (laboratory == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Laboratory was not found.";
+                return RedirectToAction(nameof(Index));
             }
             return View(laboratory);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("create")]
         public IActionResult Create() => View(new LaboratoryFormViewModel());
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(LaboratoryFormViewModel model)
@@ -169,14 +170,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
         {
             var lab = await _dbContext.Laboratories.FindAsync(id);
             if (lab == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Laboratory was not found.");
+                return View(new LaboratoryFormViewModel { Id = id });
             }
 
             return View(new LaboratoryFormViewModel
@@ -190,14 +192,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, LaboratoryFormViewModel model)
         {
             if (id != model.Id)
             {
-                return BadRequest();
+                ModelState.AddModelError(string.Empty, "The requested laboratory does not match the submitted form.");
+                return View(model);
             }
 
             if (!ModelState.IsValid)
@@ -208,7 +211,8 @@ namespace projekt.Controllers
             var lab = await _dbContext.Laboratories.FindAsync(id);
             if (lab == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Laboratory no longer exists.");
+                return View(model);
             }
 
             lab.Name = model.Name;
@@ -267,7 +271,8 @@ namespace projekt.Controllers
             var lab = await _dbContext.Laboratories.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id);
             if (lab == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Laboratory was not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(lab);
@@ -281,7 +286,8 @@ namespace projekt.Controllers
             var lab = await _dbContext.Laboratories.FindAsync(id);
             if (lab == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Laboratory no longer exists.";
+                return RedirectToAction(nameof(Index));
             }
 
             _dbContext.Laboratories.Remove(lab);

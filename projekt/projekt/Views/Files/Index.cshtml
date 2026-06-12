@@ -8,7 +8,7 @@
             <div class="card-body p-4 p-md-5">
                 <div class="mb-4">
                     <h1 class="h3 mb-2">Files</h1>
-                    <p class="text-muted mb-0">Drop a file below to upload it to the server. Uploaded files are stored locally in <span class="fw-semibold">wwwroot/uploads</span> and tracked in the database.</p>
+                    <p class="text-muted mb-0">Drop a file below to upload it to the server. Uploaded files are stored locally outside the web root and tracked in the database.</p>
                 </div>
 
                 <form asp-action="Upload" asp-controller="Files" method="post" class="dropzone border rounded-3 bg-light p-4" id="file-dropzone" enctype="multipart/form-data">
@@ -42,7 +42,7 @@
                                 </tr>
                             </thead>
                             <tbody id="files-list">
-                                <tr><td colspan="4" class="text-muted">Loading files...</td></tr>
+                                <tr><td colspan="5" class="text-muted">Loading files...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -91,13 +91,13 @@
         const loadFiles = async () => {
             const response = await fetch('@Url.Action("List", "Files")', { headers: { 'X-Requested-With': 'XMLHttpRequest' } });
             if (!response.ok) {
-                filesList.innerHTML = '<tr><td colspan="4" class="text-danger">Unable to load files.</td></tr>';
+                filesList.innerHTML = '<tr><td colspan="5" class="text-danger">Unable to load files.</td></tr>';
                 return;
             }
 
             const files = await response.json();
             if (!files.length) {
-                filesList.innerHTML = '<tr><td colspan="4" class="text-muted">No files uploaded yet.</td></tr>';
+                filesList.innerHTML = '<tr><td colspan="5" class="text-muted">No files uploaded yet.</td></tr>';
                 return;
             }
 
@@ -110,7 +110,7 @@
                     <td>${formatBytes(file.sizeBytes)}</td>
                     <td>${escapeHtml(file.uploadedAtUtc)}</td>
                     <td class="text-end">
-                        <a href="${file.downloadUrl}" class="btn btn-sm btn-outline-secondary me-2" target="_blank" rel="noreferrer">Open</a>
+                        <button type="button" class="btn btn-sm btn-outline-dark me-2 copy-path" data-path="${escapeHtml(file.diskPath)}">Copy path</button>
                         <button type="button" class="btn btn-sm btn-outline-danger delete-file" data-file-id="${file.id}">Delete</button>
                     </td>
                 </tr>
@@ -161,9 +161,12 @@
                     loadFiles();
                 });
 
-                this.on('error', function (_file, message) {
-                    statusElement.textContent = 'Upload failed.';
-                    console.error(message);
+                this.on('error', function (_file, message, xhr) {
+                    const details = typeof message === 'string'
+                        ? message
+                        : xhr?.responseText ?? 'Upload failed.';
+                    statusElement.textContent = `Upload failed: ${details}`;
+                    console.error('Upload failed:', details, xhr);
                 });
             },
             success: function (file, response) {
@@ -190,6 +193,20 @@
                 }
 
                 await deleteFile(fileId);
+            }
+
+            if (target.classList.contains('copy-path')) {
+                const path = target.getAttribute('data-path');
+                if (!path) {
+                    return;
+                }
+
+                try {
+                    await navigator.clipboard.writeText(path);
+                    statusElement.textContent = 'File path copied to clipboard.';
+                } catch {
+                    statusElement.textContent = 'Unable to copy path. Please copy it manually.';
+                }
             }
         });
 

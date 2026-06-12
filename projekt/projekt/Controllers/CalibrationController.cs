@@ -48,7 +48,8 @@ namespace projekt.Controllers
 
             if (calibration == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Calibration record was not found.";
+                return RedirectToAction(nameof(Index));
             }
             return View(calibration);
         }
@@ -192,7 +193,7 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -202,7 +203,8 @@ namespace projekt.Controllers
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (calibration == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Calibration record was not found.");
+                return View(new CalibrationFormViewModel { Id = id, CalibrationDateTime = DateTime.Now });
             }
 
             return View(new CalibrationFormViewModel
@@ -221,14 +223,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CalibrationFormViewModel model)
         {
             if (id != model.Id)
             {
-                return BadRequest();
+                ModelState.AddModelError(string.Empty, "The requested calibration record does not match the submitted form.");
+                return View(model);
             }
 
             if (!ModelState.IsValid)
@@ -239,7 +242,8 @@ namespace projekt.Controllers
             var calibration = await _dbContext.Calibrations.FindAsync(id);
             if (calibration == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Calibration record no longer exists.");
+                return View(model);
             }
 
             calibration.DeviceId = model.DeviceId;
@@ -318,7 +322,8 @@ namespace projekt.Controllers
                 .FirstOrDefaultAsync(c => c.Id == id);
             if (calibration == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Calibration record was not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(calibration);
@@ -332,7 +337,8 @@ namespace projekt.Controllers
             var calibration = await _dbContext.Calibrations.FindAsync(id);
             if (calibration == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Calibration record no longer exists.";
+                return RedirectToAction(nameof(Index));
             }
 
             _dbContext.Calibrations.Remove(calibration);

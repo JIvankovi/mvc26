@@ -224,5 +224,7 @@ C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\De
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\Debug\net9.0\runtimes\win-x86\native\e_sqlite3.dll
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.MicrosoftAccount.dll
+C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\ywrnuxchy5-bbis3evy0n.gz
+C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\a9ltbi6mqq-tfsp7looap.gz
+C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\9j102deudw-tfsp7looap.gz
 C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
-C:\Users\CinoP\OneDrive\Desktop\VSCode\ASPNET\mvc26\mvc26\projekt\projekt\obj\Debug\net9.0\compressed\jcgq12kkok-bbis3evy0n.gz

@@ -11,7 +11,6 @@ namespace projekt.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        private const string AdminEmail = "admin@admin.com";
         private const string AdminRole = "Admin";
         private const string UserRole = "User";
 

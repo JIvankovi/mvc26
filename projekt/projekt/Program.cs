@@ -1,5 +1,6 @@
 using projekt.Models;
 using projekt.Data;
+using projekt.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
@@ -78,9 +79,50 @@ namespace projekt
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
+            var contentRootPath = app.Environment.ContentRootPath;
+
+            AppDomain.CurrentDomain.UnhandledException += (_, eventArgs) =>
+            {
+                if (eventArgs.ExceptionObject is Exception exception)
+                {
+                    app.Logger.LogCritical(exception, "Unhandled exception caused process termination.");
+                    RuntimeFileLog.WriteException(contentRootPath, "Unhandled exception caused process termination.", exception);
+                }
+                else
+                {
+                    app.Logger.LogCritical("Unhandled non-exception object caused process termination: {ExceptionObject}", eventArgs.ExceptionObject);
+                    RuntimeFileLog.Write(contentRootPath, $"Unhandled non-exception object caused process termination: {eventArgs.ExceptionObject}");
+                }
+            };
+
+            TaskScheduler.UnobservedTaskException += (_, eventArgs) =>
+            {
+                app.Logger.LogCritical(eventArgs.Exception, "Unobserved task exception.");
+                RuntimeFileLog.WriteException(contentRootPath, "Unobserved task exception.", eventArgs.Exception);
+            };
+
+            app.Use(async (context, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (Exception exception)
+                {
+                    RuntimeFileLog.WriteException(
+                        contentRootPath,
+                        $"Unhandled request exception for {context.Request.Method} {context.Request.Path}",
+                        exception);
+                    throw;
+                }
+            });
 
             // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
             {
                 app.UseExceptionHandler("/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

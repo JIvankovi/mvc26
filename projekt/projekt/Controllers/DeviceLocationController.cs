@@ -37,7 +37,25 @@ namespace projekt.Controllers
             return PartialView("_DeviceLocationTable", locations);
         }
 
-        [Authorize(Roles = "Admin")]
+        [HttpGet("details/{id:int}")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var deviceLocation = await _dbContext.DeviceLocations
+                .Include(dl => dl.Device)
+                .Include(dl => dl.Laboratory)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(dl => dl.Id == id);
+
+            if (deviceLocation == null)
+            {
+                TempData["ErrorMessage"] = "Device location was not found.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(deviceLocation);
+        }
+
+        [Authorize]
         [HttpGet("create")]
         public IActionResult Create() => View(new DeviceLocationFormViewModel());
 
@@ -93,7 +111,7 @@ namespace projekt.Controllers
             return Ok(location);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DeviceLocationFormViewModel model)
@@ -171,7 +189,7 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -182,7 +200,8 @@ namespace projekt.Controllers
 
             if (entity == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Device location was not found.");
+                return View(new DeviceLocationFormViewModel { Id = id });
             }
 
             return View(new DeviceLocationFormViewModel
@@ -199,14 +218,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DeviceLocationFormViewModel model)
         {
             if (id != model.Id)
             {
-                return BadRequest();
+                ModelState.AddModelError(string.Empty, "The requested device location does not match the submitted form.");
+                return View(model);
             }
 
             if (!ModelState.IsValid)
@@ -217,7 +237,8 @@ namespace projekt.Controllers
             var entity = await _dbContext.DeviceLocations.FindAsync(id);
             if (entity == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Device location no longer exists.");
+                return View(model);
             }
 
             if (!await _dbContext.Devices.AnyAsync(d => d.Id == model.DeviceId))
@@ -303,7 +324,8 @@ namespace projekt.Controllers
 
             if (entity == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Device location was not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(entity);
@@ -317,7 +339,8 @@ namespace projekt.Controllers
             var entity = await _dbContext.DeviceLocations.FindAsync(id);
             if (entity == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Device location no longer exists.";
+                return RedirectToAction(nameof(Index));
             }
 
             _dbContext.DeviceLocations.Remove(entity);

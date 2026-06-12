@@ -106,19 +106,20 @@ namespace projekt.Controllers
 
             if (device == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Device was not found.";
+                return RedirectToAction(nameof(Index));
             }
             return View(device);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("create")]
         public IActionResult Create()
         {
             return View(new DeviceFormViewModel());
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DeviceFormViewModel model)
@@ -174,14 +175,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
         {
             var device = await _dbContext.Devices.FindAsync(id);
             if (device == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Device was not found.");
+                return View(new DeviceFormViewModel { Id = id });
             }
 
             var vm = new DeviceFormViewModel
@@ -196,14 +198,15 @@ namespace projekt.Controllers
             return View(vm);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, DeviceFormViewModel model)
         {
             if (id != model.Id)
             {
-                return BadRequest();
+                ModelState.AddModelError(string.Empty, "The requested device does not match the submitted form.");
+                return View(model);
             }
 
             if (!ModelState.IsValid)
@@ -214,7 +217,8 @@ namespace projekt.Controllers
             var device = await _dbContext.Devices.FindAsync(id);
             if (device == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Device no longer exists.");
+                return View(model);
             }
 
             device.Name = model.Name;
@@ -275,7 +279,8 @@ namespace projekt.Controllers
                 .FirstOrDefaultAsync(d => d.Id == id);
             if (device == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Device was not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(device);
@@ -289,7 +294,8 @@ namespace projekt.Controllers
             var device = await _dbContext.Devices.FindAsync(id);
             if (device == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Device no longer exists.";
+                return RedirectToAction(nameof(Index));
             }
 
             _dbContext.Devices.Remove(device);

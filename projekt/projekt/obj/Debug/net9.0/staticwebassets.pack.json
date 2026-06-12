@@ -261,8 +261,24 @@
       "PackagePath": "staticwebassets\\uploads\\.gitkeep"
     },
     {
-      "Id": "C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\projekt\\projekt\\wwwroot\\uploads\\df982c08aaf14f1bb4d160a77af6a095.md",
-      "PackagePath": "staticwebassets\\uploads\\df982c08aaf14f1bb4d160a77af6a095.md"
+      "Id": "C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\projekt\\projekt\\wwwroot\\uploads\\1246ec62a2334795b982bc24ae00ac3e.png",
+      "PackagePath": "staticwebassets\\uploads\\1246ec62a2334795b982bc24ae00ac3e.png"
+    },
+    {
+      "Id": "C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\projekt\\projekt\\wwwroot\\uploads\\39c298e38ac14e929a3af87ec3fdad07.pdf",
+      "PackagePath": "staticwebassets\\uploads\\39c298e38ac14e929a3af87ec3fdad07.pdf"
+    },
+    {
+      "Id": "C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\projekt\\projekt\\wwwroot\\uploads\\40d37308c432492d939e0a81a55d3651.md",
+      "PackagePath": "staticwebassets\\uploads\\40d37308c432492d939e0a81a55d3651.md"
+    },
+    {
+      "Id": "C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\projekt\\projekt\\wwwroot\\uploads\\5d106016322c4a49bcd8975290284f1d.txt",
+      "PackagePath": "staticwebassets\\uploads\\5d106016322c4a49bcd8975290284f1d.txt"
+    },
+    {
+      "Id": "C:\\Users\\CinoP\\OneDrive\\Desktop\\VSCode\\ASPNET\\mvc26\\mvc26\\projekt\\projekt\\wwwroot\\uploads\\f1fa9da95758421a81bb16689b63cf53.txt",
+      "PackagePath": "staticwebassets\\uploads\\f1fa9da95758421a81bb16689b63cf53.txt"
     },
     {
       "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.projekt.props",

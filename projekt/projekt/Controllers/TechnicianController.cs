@@ -93,6 +93,7 @@ namespace projekt.Controllers
             return Ok(technician);
         }
 
+        [HttpGet("details/{id:int}")]
         public async Task<IActionResult> Details(int id)
         {
             var technician = await _dbContext.Technicians
@@ -101,16 +102,17 @@ namespace projekt.Controllers
 
             if (technician == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Technician was not found.";
+                return RedirectToAction(nameof(Index));
             }
             return View(technician);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("create")]
         public IActionResult Create() => View(new TechnicianFormViewModel());
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(TechnicianFormViewModel model)
@@ -166,14 +168,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpGet("edit/{id:int}")]
         public async Task<IActionResult> Edit(int id)
         {
             var entity = await _dbContext.Technicians.FindAsync(id);
             if (entity == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Technician was not found.");
+                return View(new TechnicianFormViewModel { Id = id });
             }
 
             return View(new TechnicianFormViewModel
@@ -187,14 +190,15 @@ namespace projekt.Controllers
             });
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         [HttpPost("edit/{id:int}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, TechnicianFormViewModel model)
         {
             if (id != model.Id)
             {
-                return BadRequest();
+                ModelState.AddModelError(string.Empty, "The requested technician does not match the submitted form.");
+                return View(model);
             }
 
             if (!ModelState.IsValid)
@@ -205,7 +209,8 @@ namespace projekt.Controllers
             var entity = await _dbContext.Technicians.FindAsync(id);
             if (entity == null)
             {
-                return NotFound();
+                ModelState.AddModelError(string.Empty, "Technician no longer exists.");
+                return View(model);
             }
 
             entity.Name = model.Name;
@@ -264,7 +269,8 @@ namespace projekt.Controllers
             var entity = await _dbContext.Technicians.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
             if (entity == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Technician was not found.";
+                return RedirectToAction(nameof(Index));
             }
 
             return View(entity);
@@ -278,7 +284,8 @@ namespace projekt.Controllers
             var entity = await _dbContext.Technicians.FindAsync(id);
             if (entity == null)
             {
-                return NotFound();
+                TempData["ErrorMessage"] = "Technician no longer exists.";
+                return RedirectToAction(nameof(Index));
             }
 
             _dbContext.Technicians.Remove(entity);
