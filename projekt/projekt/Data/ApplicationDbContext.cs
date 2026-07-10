@@ -21,7 +21,6 @@ namespace projekt.Data
         public DbSet<Technician> Technicians { get; set; }
         public DbSet<Laboratory> Laboratories { get; set; }
         public DbSet<DeviceLocation> DeviceLocations { get; set; }
-        public DbSet<UploadedFile> UploadedFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

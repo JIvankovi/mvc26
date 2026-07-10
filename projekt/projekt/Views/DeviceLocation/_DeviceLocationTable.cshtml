@@ -27,8 +27,8 @@
                 {
                     <tr>
                         <td class="text-center align-middle"><span class="badge bg-secondary">@location.Id</span></td>
-                        <td class="align-middle">@location.Device?.Name ?? "Unknown"</td>
-                        <td class="align-middle">@location.Laboratory?.Name ?? "Unassigned"</td>
+                        <td class="align-middle">@location.Device?.Name</td>
+                        <td class="align-middle">@location.Laboratory?.Name</td>
                         <td class="align-middle">@location.AssignedDate?.ToString("dd.MM.yyyy")</td>
                         <td class="align-middle">@location.RemovedDate?.ToString("dd.MM.yyyy")</td>
                         <td class="align-middle text-center">

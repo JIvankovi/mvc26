@@ -12,8 +12,8 @@ using projekt.Data;
 namespace projekt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260611154302_AddUploadedFiles")]
-    partial class AddUploadedFiles
+    [Migration("20260710072512_RemoveUploadedFilesFeature")]
+    partial class RemoveUploadedFilesFeature
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -400,48 +400,6 @@ namespace projekt.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Technicians");
-                });
-
-            modelBuilder.Entity("projekt.Models.UploadedFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ContentType")
-                        .HasMaxLength(256)
-                        .HasColumnType("varchar(256)");
-
-                    b.Property<string>("OriginalFileName")
-                        .IsRequired()
-                        .HasMaxLength(260)
-                        .HasColumnType("varchar(260)");
-
-                    b.Property<string>("RelativePath")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("varchar(512)");
-
-                    b.Property<long>("SizeBytes")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("StoredFileName")
-                        .IsRequired()
-                        .HasMaxLength(260)
-                        .HasColumnType("varchar(260)");
-
-                    b.Property<DateTime>("UploadedAtUtc")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("UploadedByUserId")
-                        .HasMaxLength(450)
-                        .HasColumnType("varchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UploadedFiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

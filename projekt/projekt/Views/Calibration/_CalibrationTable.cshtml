@@ -27,8 +27,8 @@
                 {
                     <tr>
                         <td class="text-center align-middle"><span class="badge bg-secondary">@calibration.Id</span></td>
-                        <td class="align-middle">@calibration.Device?.Name ?? "Unknown"</td>
-                        <td class="align-middle">@calibration.Technician?.Name ?? "N/A"</td>
+                        <td class="align-middle">@calibration.Device?.Name</td>
+                        <td class="align-middle">@calibration.Technician?.Name</td>
                         <td class="align-middle">@calibration.CalibrationDateTime.ToString("dd.MM.yyyy HH:mm")</td>
                         <td class="align-middle text-center">@calibration.MeasuredDeviation</td>
                         <td class="align-middle text-center">

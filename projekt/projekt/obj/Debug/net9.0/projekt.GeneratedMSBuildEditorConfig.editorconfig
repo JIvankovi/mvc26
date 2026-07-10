@@ -108,10 +108,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGV2aWNlXF9EZXZpY2VUYWJsZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/CinoP/OneDrive/Desktop/VSCode/ASPNET/mvc26/mvc26/projekt/projekt/Views/Files/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRmlsZXNcSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/CinoP/OneDrive/Desktop/VSCode/ASPNET/mvc26/mvc26/projekt/projekt/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -162,6 +158,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/CinoP/OneDrive/Desktop/VSCode/ASPNET/mvc26/mvc26/projekt/projekt/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/CinoP/OneDrive/Desktop/VSCode/ASPNET/mvc26/mvc26/projekt/projekt/Views/Simulation/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2ltdWxhdGlvblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/CinoP/OneDrive/Desktop/VSCode/ASPNET/mvc26/mvc26/projekt/projekt/Views/Technician/Create.cshtml]

@@ -1,0 +1,92 @@
+@model List<projekt.ViewModels.SimulationLaboratoryViewModel>
+
+@{
+    ViewData["Title"] = "Simulation";
+}
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5">Simulation</h1>
+            <p class="text-muted mb-0">Live-like random readings grouped by laboratory and currently assigned devices.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        @foreach (var laboratory in Model)
+        {
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 shadow-sm border-0 simulation-lab-box">
+                    <div class="card-header bg-info text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-semibold">@laboratory.LaboratoryName</span>
+                            <span class="badge text-bg-light">@laboratory.Devices.Count device(s)</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @if (laboratory.Devices.Count == 0)
+                        {
+                            <p class="text-muted mb-0">No devices are currently assigned to this laboratory.</p>
+                        }
+                        else
+                        {
+                            <ul class="list-group list-group-flush">
+                                @foreach (var device in laboratory.Devices)
+                                {
+                                    <li class="list-group-item px-0 d-flex justify-content-between align-items-center">
+                                        <span>@device.DeviceName</span>
+                                        <span class="fw-semibold simulation-reading"
+                                              data-measurement-type="@device.MeasurementType"
+                                              data-unit="@device.Unit">@device.ReadingValue @device.Unit</span>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .simulation-lab-box {
+        border-left: 5px solid #0d6efd;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        (() => {
+            const generators = {
+                Temperature: () => formatReading((Math.random() * 80) - 20),
+                Pressure: () => formatReading((Math.random() * 100) + 950),
+                Humidity: () => formatReading(Math.random() * 100),
+                WindSpeed: () => formatReading(Math.random() * 40),
+                Voltage: () => formatReading(Math.random() * 240),
+                LightSpectrum: () => formatReading(Math.random() * 1000),
+                ElectricalSignal: () => formatReading(Math.random() * 5000)
+            };
+
+            const readings = document.querySelectorAll('.simulation-reading');
+            if (!readings.length) {
+                return;
+            }
+
+            function formatReading(value) {
+                return value.toFixed(2);
+            }
+
+            function updateReadings() {
+                readings.forEach((reading) => {
+                    const measurementType = reading.dataset.measurementType;
+                    const unit = reading.dataset.unit || '';
+                    const generator = generators[measurementType] || (() => formatReading(Math.random() * 100));
+                    reading.textContent = `${generator()} ${unit}`.trim();
+                });
+            }
+
+            window.setInterval(updateReadings, 1000);
+        })();
+    </script>
+}
