@@ -7,6 +7,7 @@ using System.Data.Common;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
+using System.Diagnostics;
 
 namespace projekt
 {
@@ -115,6 +116,38 @@ namespace projekt
                         exception);
                     throw;
                 }
+            });
+
+            app.Use(async (context, next) =>
+            {
+                var path = context.Request.Path;
+                var isApiTransaction = path.StartsWithSegments("/lookup") || path.Value?.Contains("/api", StringComparison.OrdinalIgnoreCase) == true;
+
+                if (!isApiTransaction)
+                {
+                    await next();
+                    return;
+                }
+
+                var startedAtUtc = DateTime.UtcNow;
+                var stopwatch = Stopwatch.StartNew();
+
+                await next();
+
+                stopwatch.Stop();
+                var currentUser = context.User?.Identity?.IsAuthenticated == true
+                    ? context.User.Identity?.Name ?? "authenticated"
+                    : "anonymous";
+
+                RuntimeFileLog.WriteApiTransaction(
+                    contentRootPath,
+                    startedAtUtc,
+                    context.Request.Method,
+                    context.Request.Path,
+                    context.Request.QueryString.Value ?? string.Empty,
+                    context.Response.StatusCode,
+                    stopwatch.ElapsedMilliseconds,
+                    currentUser);
             });
 
             // Configure the HTTP request pipeline.

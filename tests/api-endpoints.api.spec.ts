@@ -10,6 +10,12 @@ type CrudEndpoint = {
   updatePayload: Record<string, unknown>;
 };
 
+type RequestOptions = {
+  data?: Record<string, unknown>;
+  params?: Record<string, string>;
+  maxRedirects?: number;
+};
+
 const crudEndpoints: CrudEndpoint[] = [
   {
     name: 'devices',
@@ -128,8 +134,28 @@ function expectAuthGate(response: APIResponse, endpoint: string): void {
   }
 }
 
+async function sendRequest(
+  request: APIRequestContext,
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  endpoint: string,
+  options?: RequestOptions,
+): Promise<APIResponse> {
+  let response: APIResponse;
+  if (method === 'GET') {
+    response = await request.get(endpoint, options);
+  } else if (method === 'POST') {
+    response = await request.post(endpoint, options);
+  } else if (method === 'PUT') {
+    response = await request.put(endpoint, options);
+  } else {
+    response = await request.delete(endpoint, options);
+  }
+
+  return response;
+}
+
 async function getFirstEntityIdOrNull(request: APIRequestContext, collectionPath: string): Promise<number | null> {
-  const response = await request.get(collectionPath);
+  const response = await sendRequest(request, 'GET', collectionPath);
   expect(response.status(), `GET ${collectionPath} should return 200`).toBe(200);
 
   const body = (await response.json()) as Array<{ id?: unknown }>;
@@ -145,7 +171,7 @@ async function getFirstEntityIdOrNull(request: APIRequestContext, collectionPath
 test.describe('API endpoints coverage', () => {
   test('covers all GET API and lookup endpoints', async ({ request }) => {
     for (const endpoint of crudEndpoints) {
-      const listResponse = await request.get(endpoint.collectionPath);
+      const listResponse = await sendRequest(request, 'GET', endpoint.collectionPath);
       expect(listResponse.status(), `GET ${endpoint.collectionPath}`).toBe(200);
 
       const listBody = await listResponse.json();
@@ -153,7 +179,7 @@ test.describe('API endpoints coverage', () => {
 
       const firstId = await getFirstEntityIdOrNull(request, endpoint.collectionPath);
       const idToQuery = firstId ?? missingId;
-      const byIdResponse = await request.get(endpoint.byIdPath(idToQuery));
+      const byIdResponse = await sendRequest(request, 'GET', endpoint.byIdPath(idToQuery));
 
       if (firstId === null) {
         expect(byIdResponse.status(), `GET ${endpoint.byIdPath(idToQuery)} when collection empty`).toBe(404);
@@ -165,7 +191,7 @@ test.describe('API endpoints coverage', () => {
     }
 
     for (const lookupPath of lookupEndpoints) {
-      const lookupResponse = await request.get(lookupPath, { params: { term: 'a' } });
+      const lookupResponse = await sendRequest(request, 'GET', lookupPath, { params: { term: 'a' } });
       expect(lookupResponse.status(), `GET ${lookupPath}`).toBe(200);
       const lookupBody = await lookupResponse.json();
       expect(Array.isArray(lookupBody), `GET ${lookupPath} should return array`).toBeTruthy();
@@ -174,13 +200,13 @@ test.describe('API endpoints coverage', () => {
 
   test('covers all protected POST/PUT/DELETE API endpoints', async ({ request }) => {
     for (const endpoint of crudEndpoints) {
-      const postResponse = await request.post(endpoint.collectionPath, {
+      const postResponse = await sendRequest(request, 'POST', endpoint.collectionPath, {
         data: endpoint.createPayload,
         maxRedirects: 0,
       });
       expectAuthGate(postResponse, `POST ${endpoint.collectionPath}`);
 
-      const putResponse = await request.put(endpoint.byIdPath(missingId), {
+      const putResponse = await sendRequest(request, 'PUT', endpoint.byIdPath(missingId), {
         data: {
           ...endpoint.updatePayload,
           Id: missingId,
@@ -189,7 +215,7 @@ test.describe('API endpoints coverage', () => {
       });
       expectAuthGate(putResponse, `PUT ${endpoint.byIdPath(missingId)}`);
 
-      const deleteResponse = await request.delete(endpoint.byIdPath(missingId), {
+      const deleteResponse = await sendRequest(request, 'DELETE', endpoint.byIdPath(missingId), {
         maxRedirects: 0,
       });
       expectAuthGate(deleteResponse, `DELETE ${endpoint.byIdPath(missingId)}`);

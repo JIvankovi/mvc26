@@ -22,5 +22,28 @@ namespace projekt.Diagnostics
         {
             Write(contentRootPath, $"{message}{Environment.NewLine}{exception}");
         }
+
+        public static void WriteApiTransaction(
+            string contentRootPath,
+            DateTime timestampUtc,
+            string method,
+            string path,
+            string queryString,
+            int statusCode,
+            long durationMs,
+            string user)
+        {
+            var logsDirectory = Path.Combine(contentRootPath, "logs");
+            Directory.CreateDirectory(logsDirectory);
+
+            var logPath = Path.Combine(logsDirectory, "api-transactions.log");
+            var line =
+                $"[{timestampUtc:u}] {method} {path}{queryString} | status={statusCode} | durationMs={durationMs} | user={user}{Environment.NewLine}";
+
+            lock (SyncLock)
+            {
+                File.AppendAllText(logPath, line);
+            }
+        }
     }
 }
